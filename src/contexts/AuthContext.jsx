@@ -1,47 +1,48 @@
-// src/contexts/AuthContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut as firebaseSignOut } from "firebase/auth";
 import { auth, db } from "../firebase";
-import { onAuthStateChanged, signOut as firebaseSignOut, } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
+export function useAuth() {
+  return useContext(AuthContext);
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // for loading state
 
-useEffect(() => {
-  const unsub = onAuthStateChanged(auth, (firebaseUser) => {
-    const handleUser = async () => {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        setUser(firebaseUser);
+        // ✅ Check if user's email is allowed
+        const allowedRef = doc(db, "allowed_users", firebaseUser.email);
+        const allowedSnap = await getDoc(allowedRef);
 
-        const userRef = doc(db, "users", firebaseUser.uid);
-        await setDoc(userRef, {
-          name: firebaseUser.displayName,
-          email: firebaseUser.email,
-          photoURL: firebaseUser.photoURL,
-          lastLogin: new Date()
-        }, { merge: true });
+        if (allowedSnap.exists()) {
+          setUser(firebaseUser);
+        } else {
+          // ❌ Not allowed
+          alert("Sorry, you are not authorized to access this app.");
+          await firebaseSignOut(auth);
+          setUser(null);
+        }
       } else {
         setUser(null);
       }
-    };
+      setLoading(false);
+    });
 
-    handleUser(); // ✅ call the async wrapper
-  });
+    return unsubscribe;
+  }, []);
 
-  return unsub;
-}, []);
-  
-  const signOut = () => firebaseSignOut(auth);
+  const login = () => signInWithPopup(auth, new GoogleAuthProvider());
+  const logout = () => firebaseSignOut(auth);
 
   return (
-    <AuthContext.Provider value={{ user, signOut }}>
+    <AuthContext.Provider value={{ user, loading, login, signOut: logout }}>
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  return useContext(AuthContext);
 }
