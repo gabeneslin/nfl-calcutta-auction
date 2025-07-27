@@ -55,3 +55,47 @@ npm install
 
 # Start dev server
 npm start
+```
+
+## Firebase Setup
+
+Set up Firebase by either:
+	•	creating a .env file with your Firebase credentials, or
+	•	manually entering the config directly in src/firebase.js
+```
+// src/firebase.js
+const firebaseConfig = {
+  apiKey: "...",
+  authDomain: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "...",
+};
+```
+## Start the App Locally
+```
+npm start
+```
+This runs the app in development mode at http://localhost:3000.
+## Deployment
+This project uses Firebase Hosting with GitHub Actions to deploy automatically when changes are pushed to main.
+
+If deploying manually:
+```
+npm run build
+firebase deploy
+```
+## 🔐 Access Control
+Only users in the allowed_users Firestore collection (with document IDs matching their email addresses) can log in.
+
+Admins can add or remove users via the “Allowed Users Admin” panel.
+
+## 👥 Contributors
+	•	@gabeneslin — Creator and Maintainer
+ 
+## 📄 License
+This project is licensed under the MIT License.
+ 
+
+ 
