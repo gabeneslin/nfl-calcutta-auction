@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { db } from "./firebase";
-import { collection, getDocs } from "firebase/firestore";
+import React from "react";
 import LoginButton from "./components/LoginButton";
 import { useAuth } from "./contexts/AuthContext";
 import TeamList from "./components/TeamList";
