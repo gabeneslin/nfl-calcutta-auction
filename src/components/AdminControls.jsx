@@ -7,7 +7,6 @@ import {
   updateDoc,
   collection,
   getDocs,
-  writeBatch,
   onSnapshot,
   Timestamp,
 } from "firebase/firestore";
@@ -82,7 +81,7 @@ setCurrentIndex(index >= 0 ? index : 0);
     };
 
     if (allTeams.length > 0) fetchCurrent();
-  }, [allTeams]);
+  }, [allTeams, teamOrder]);
 
 const advanceAuction = async () => {
   if (currentIndex === null || currentIndex >= teamOrder.length) return;

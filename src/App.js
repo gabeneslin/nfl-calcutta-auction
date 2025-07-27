@@ -13,7 +13,7 @@ import AllowedUsersAdmin from "./components/AllowedUsersAdmin";
 
 function App() {
   const { user, loading, signOut } = useAuth();
-  const [teams, setTeams] = useState([]);
+  const [setTeams] = useState([]);
 
   // ✅ Hooks must be at the top
   useEffect(() => {
