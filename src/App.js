@@ -36,10 +36,13 @@ function App() {
         <Leaderboard />
         <UpcomingTeams />
         
-        {/* Admin Tools */}
-        <AdminControls />
-        <AllowedUsersAdmin />
-        <PropsAdmin />
+      {user.email === "gabeneslin@gmail.com" && (
+  <>
+    <AdminControls />
+    <AllowedUsersAdmin />
+    <PropsAdmin />
+  </>
+)}
       </div>
 
       {/* Right Column */}
