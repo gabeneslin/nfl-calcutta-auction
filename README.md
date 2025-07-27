@@ -97,5 +97,3 @@ Admins can add or remove users via the “Allowed Users Admin” panel.
 ## 📄 License
 This project is licensed under the MIT License.
  
-
- 
