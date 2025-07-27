@@ -10,29 +10,11 @@ import Leaderboard from "./components/Leaderboard";
 import UpcomingTeams from "./components/UpcomingTeams";
 import CurrentAuctionTeam from "./components/CurrentAuctionTeam";
 import AllowedUsersAdmin from "./components/AllowedUsersAdmin";
+import PropsAdmin from "./components/PropsAdmin";
 
 function App() {
   const { user, loading, signOut } = useAuth();
-  const [setTeams] = useState([]);
 
-  // ✅ Hooks must be at the top
-  useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "teams"));
-        const data = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        console.log("Fetched teams:", data);
-        setTeams(data);
-      } catch (error) {
-        console.error("Error fetching teams:", error);
-      }
-    };
-
-    fetchTeams();
-  }, [setTeams]);
 
   // ✅ Safe to return conditionally now
   if (loading) return <div>Loading...</div>;
@@ -55,8 +37,11 @@ function App() {
         <BidForm />
         <Leaderboard />
         <UpcomingTeams />
+        
+        {/* Admin Tools */}
         <AdminControls />
         <AllowedUsersAdmin />
+        <PropsAdmin />
       </div>
 
       {/* Right Column */}
