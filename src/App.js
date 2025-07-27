@@ -32,7 +32,7 @@ function App() {
     };
 
     fetchTeams();
-  }, []);
+  }, [setTeams]);
 
   // ✅ Safe to return conditionally now
   if (loading) return <div>Loading...</div>;

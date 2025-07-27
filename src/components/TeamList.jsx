@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import teamLogos from "../utils/teamLogos";
-import stringToColor from "../utils/stringToColor";
 import { getUserColor } from "../utils/colorUtils";
 import { saveAs } from "file-saver";
 
