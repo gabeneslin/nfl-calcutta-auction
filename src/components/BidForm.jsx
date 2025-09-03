@@ -73,18 +73,26 @@ if (auctionState?.currentDeadline?.toDate && auctionState.currentDeadline.toDate
   const auctionRef = doc(db, "settings", "auction");
   const newDeadline = Timestamp.fromDate(new Date(Date.now() + 30 * 1000)); // ✅ defined first
 
-  await updateDoc(auctionRef, {
-    highBid: bidValue,
-    highBidder: user.displayName || user.email,
-    currentDeadline: newDeadline, // ✅ used safely after definition
-  });
+  const bidder = user.displayName || user.email;
 
-  await addDoc(collection(db, "bids"), {
-    teamId: currentTeam.id,
-    amount: bidAmount,
-    bidder: user.displayName || user.email,
-    timestamp: serverTimestamp(),
-  });
+await updateDoc(auctionRef, {
+  highBid: bidValue,
+  highBidder: bidder,
+  currentDeadline: newDeadline,
+});
+
+await updateDoc(doc(db, "teams", currentTeam.id), {
+  bid: bidValue,
+  owner: bidder,
+  timestamp: serverTimestamp(),
+});
+
+await addDoc(collection(db, "bids"), {
+  teamId: currentTeam.id,
+  amount: bidValue,
+  bidder,
+  timestamp: serverTimestamp(),
+});
 
   setBidAmount("");
 };
